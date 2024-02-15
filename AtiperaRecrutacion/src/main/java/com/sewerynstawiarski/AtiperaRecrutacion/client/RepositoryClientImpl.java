@@ -21,13 +21,22 @@ public class RepositoryClientImpl implements RepositoryClient {
     }
 
     @Override
-    public Flux<RepositoryDTO> listRepositories(String user) {
+    public List<RepositoryDTO> listRepositories(String user) {
         var repositories =  webClient.get().uri(uriBuilder ->
                         uriBuilder.path("users/{user}/repos")
                                 .queryParam("type", "owner")
                                 .build(user))
                 .retrieve()
-                .bodyToFlux(RepositoryDTO.class);
+                .bodyToFlux(RepositoryDTO.class)
+                .collect(Collectors.toList()).block();
+
+        assert repositories != null;
+        var repoWithBranches =  repositories.stream()
+                .peek(repositoryDTO -> repositoryDTO
+                        .setBranches(getBranches(repositoryDTO.getOwner().getLogin(), repositoryDTO.getName())
+                                .collect(Collectors.toList())
+                                .block()))
+                .toList();
 
         return repositories;
     }

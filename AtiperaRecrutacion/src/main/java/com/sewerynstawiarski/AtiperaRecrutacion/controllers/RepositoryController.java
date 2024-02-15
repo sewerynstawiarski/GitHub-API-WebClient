@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,19 +20,6 @@ public class RepositoryController {
    public  final RepositoryClient repoClient;
    @GetMapping("/repositories/{username}")
    List<RepositoryDTO> getUsersRepositories(@RequestHeader("Accept: application/json") @PathVariable String username) {
-    var repositories = repoClient.listRepositories(username)
-            .collect(Collectors.toList()).block();
-
-       assert repositories != null;
-       var repoWithBranches =  repositories.stream()
-            .peek(repositoryDTO -> repositoryDTO.setBranches(repoClient.getBranches(repositoryDTO.getOwner().getLogin(), repositoryDTO.getName())
-                    .collect(Collectors.toList())
-                    .block()))
-               .toList();
-
-
-    return  repoWithBranches;
-
+    return  repoClient.listRepositories(username);
    }
-
 }
