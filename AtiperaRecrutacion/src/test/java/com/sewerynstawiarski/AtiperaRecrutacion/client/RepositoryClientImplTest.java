@@ -33,7 +33,7 @@ class RepositoryClientImplTest {
     void testGetBranches() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
-        webClient.getBranches("Calculator", "sewerynstawiarski")
+        webClient.getBranches("springframeworkgur", "apifirst-sb")
                 .subscribe(branchDTO -> {
                     System.out.println(branchDTO.toString());
                     atomicBoolean.set(true);

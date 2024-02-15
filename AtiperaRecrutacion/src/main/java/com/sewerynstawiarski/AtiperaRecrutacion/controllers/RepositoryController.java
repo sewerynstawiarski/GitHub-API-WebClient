@@ -26,10 +26,11 @@ public class RepositoryController {
 
        assert repositories != null;
        var repoWithBranches =  repositories.stream()
-            .peek(repositoryDTO -> repositoryDTO.setBranches(repoClient.getBranches(repositoryDTO.getName(), repositoryDTO.getOwner().getLogin())
+            .peek(repositoryDTO -> repositoryDTO.setBranches(repoClient.getBranches(repositoryDTO.getOwner().getLogin(), repositoryDTO.getName())
                     .collect(Collectors.toList())
                     .block()))
                .toList();
+
 
     return  repoWithBranches;
 

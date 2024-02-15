@@ -8,6 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class RepositoryClientImpl implements RepositoryClient {
 
@@ -30,7 +33,7 @@ public class RepositoryClientImpl implements RepositoryClient {
     }
 
     @Override
-    public Flux<BranchDTO> getBranches(String repoName, String user) {
+    public Flux<BranchDTO> getBranches(String user, String repoName) {
         var branch = webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("repos/{user}/{repoName}/branches").build(user, repoName))
                 .retrieve()

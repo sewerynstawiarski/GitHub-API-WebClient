@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface RepositoryClient {
     Flux<RepositoryDTO> listRepositories(String user);
-    Flux<BranchDTO> getBranches(String repoName, String user);
+    Flux<BranchDTO> getBranches(String user, String repoName);
 }
