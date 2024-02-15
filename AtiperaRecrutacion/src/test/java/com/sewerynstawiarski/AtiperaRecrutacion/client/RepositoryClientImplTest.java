@@ -28,4 +28,16 @@ class RepositoryClientImplTest {
         await().untilTrue(atomicBoolean);
 
     }
+
+    @Test
+    void testGetBranches() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        webClient.getBranches("Calculator", "sewerynstawiarski")
+                .subscribe(branchDTO -> {
+                    System.out.println(branchDTO.toString());
+                    atomicBoolean.set(true);
+                });
+        await().untilTrue(atomicBoolean);
+    }
 }

@@ -25,14 +25,18 @@ public class RepositoryClientImpl implements RepositoryClient {
                                 .build(user))
                 .retrieve()
                 .bodyToFlux(RepositoryDTO.class);
+
+        return repositories;
     }
 
     @Override
-    public Mono<BranchDTO> getBranches(String repoName) {
+    public Flux<BranchDTO> getBranches(String repoName, String user) {
         var branch = webClient.get()
-                .uri("")
+                .uri(uriBuilder -> uriBuilder.path("repos/{user}/{repoName}/branches").build(user, repoName))
+                .retrieve()
+                .bodyToFlux(BranchDTO.class);
 
 
-        return ;
+        return branch;
     }
 }

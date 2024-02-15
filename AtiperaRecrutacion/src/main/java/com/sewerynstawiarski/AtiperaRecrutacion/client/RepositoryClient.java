@@ -5,7 +5,9 @@ import com.sewerynstawiarski.AtiperaRecrutacion.model.RepositoryDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface RepositoryClient {
     Flux<RepositoryDTO> listRepositories(String user);
-    Mono<BranchDTO> getBranches(String repoName);
+    Flux<BranchDTO> getBranches(String repoName, String user);
 }
