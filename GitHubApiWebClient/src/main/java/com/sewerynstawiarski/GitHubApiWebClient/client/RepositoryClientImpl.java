@@ -3,7 +3,6 @@ package com.sewerynstawiarski.GitHubApiWebClient.client;
 import com.sewerynstawiarski.GitHubApiWebClient.model.BranchDTO;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryNoBranches;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
