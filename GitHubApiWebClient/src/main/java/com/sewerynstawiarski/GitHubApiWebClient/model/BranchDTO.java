@@ -1,19 +1,15 @@
-package com.sewerynstawiarski.AtiperaRecrutacion.model;
+package com.sewerynstawiarski.GitHubApiWebClient.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RepositoryDTO {
+public class BranchDTO {
     private String name;
-    private OwnerDTO owner;
-    List<BranchDTO> branches;
+    private CommitDTO commit;
 }

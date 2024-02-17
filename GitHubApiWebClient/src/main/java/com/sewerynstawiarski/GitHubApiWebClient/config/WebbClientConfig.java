@@ -1,9 +1,8 @@
-package com.sewerynstawiarski.AtiperaRecrutacion.config;
+package com.sewerynstawiarski.GitHubApiWebClient.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebbClientConfig implements WebClientCustomizer {

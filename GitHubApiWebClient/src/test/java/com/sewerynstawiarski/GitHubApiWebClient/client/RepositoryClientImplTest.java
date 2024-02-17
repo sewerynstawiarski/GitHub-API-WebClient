@@ -1,4 +1,4 @@
-package com.sewerynstawiarski.AtiperaRecrutacion.client;
+package com.sewerynstawiarski.GitHubApiWebClient.client;
 
 
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ class RepositoryClientImplTest {
     void testGetRepositories() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
-        webClient.listRepositories("sewerynstawiarski")
-                .forEach(repo -> {
+        webClient.listRepositories("octocat")
+                .subscribe(repo -> {
                     System.out.println(repo.toString());
                     atomicBoolean.set(true);
                 });
@@ -32,7 +32,7 @@ class RepositoryClientImplTest {
     void testGetBranches() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
-        var branches = webClient.getBranches("sewerynstawiarski", "Calculator")
+        var branches = webClient.getBranches("octocat", "git-consortium")
                 .subscribe(branchDTO -> {
                     System.out.println(branchDTO.toString());
                     atomicBoolean.set(true);
