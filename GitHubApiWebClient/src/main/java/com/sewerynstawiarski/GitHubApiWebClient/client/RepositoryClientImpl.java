@@ -29,6 +29,7 @@ public class RepositoryClientImpl implements RepositoryClient {
                                 .build(user))
                 .retrieve()
                 .bodyToFlux(RepositoryNoBranches.class)
+                .filter(repo -> !repo.fork())
                 .flatMap(this::addBranches);
     }
     private Mono<RepositoryDTO> addBranches(RepositoryNoBranches repositoryNoBranches) {

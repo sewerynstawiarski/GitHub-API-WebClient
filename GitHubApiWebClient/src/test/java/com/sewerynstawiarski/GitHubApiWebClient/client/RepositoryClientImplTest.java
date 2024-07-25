@@ -74,7 +74,7 @@ class RepositoryClientImplTest {
     }
 
     @Test
-    void testListRepos() {
+    void testListRepositories() {
         webTestClient.get().uri(USER_REPOSITORIES, "octocat")
                 .exchange()
                 .expectStatus().isOk()
@@ -82,8 +82,8 @@ class RepositoryClientImplTest {
                 .expectBody().jsonPath("$.size()").isEqualTo(8);
     }
     @Test
-    void testListReposNotFound() {
-        var response = webTestClient.get().uri(USER_REPOSITORIES, "dfihgbfodfuihbgndbn")
+    void testListRepositoriesNotFound() {
+        webTestClient.get().uri(USER_REPOSITORIES, "dfihgbfodfuihbgndbn")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectHeader().valueEquals("Content-type", "application/json")
