@@ -19,11 +19,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import wiremock.org.eclipse.jetty.util.ajax.JSON;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -81,7 +81,14 @@ class RepositoryClientImplTest {
                 .expectHeader().valueEquals("Content-type", "application/json")
                 .expectBody().jsonPath("$.size()").isEqualTo(8);
     }
-
+    @Test
+    void testListReposNotFound() {
+        var response = webTestClient.get().uri(USER_REPOSITORIES, "dfihgbfodfuihbgndbn")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectHeader().valueEquals("Content-type", "application/json")
+                .expectBody().jsonPath("$.message").isEqualTo("User of this name was not found on GitHub");
+    }
     @Test
     void testListRepositoriesWithWireMock() {
         stubFor(WireMock.get(urlEqualTo("/user/octocat/repositories"))
@@ -91,7 +98,7 @@ class RepositoryClientImplTest {
                         .withBody("""
                                 {"name":"octocat.github.io","owner":{"login":"octocat"}}""")));
 
-        WebClient webClient = webClientBuilder.baseUrl("http://localhost:" + wireMockPort).build();
+        WebClient webClient = webClientBuilder.baseUrl("http://localhost:" + wireMockPort).defaultHeader("Accept", "application/vnd.github+json").build();
 
         var response = webClient.get()
                 .uri("/user/octocat/repositories")
@@ -102,29 +109,8 @@ class RepositoryClientImplTest {
         System.out.println(response);
 
         assertNotNull(response);
-        assertEquals("octocat.github.io", response.getName());
-        assertEquals("octocat", response.getOwner().getLogin());
+        assertEquals("octocat.github.io", response.name());
+        assertEquals("octocat", response.owner().login());
 
-    }
-
-    @Test
-    void testListRepositoriesWithWireMockUserNotFound() {
-        stubFor(WireMock.get(urlEqualTo("/user/UserNotFound/repositories"))
-                .willReturn(aResponse()
-                        .withStatus(404)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {"message":"Not Found","documentation_url":"https://docs.github.com/rest/repos/repos#list-repositories-for-a-user","status":"404"}""")));
-
-        WebClient webClient = webClientBuilder.baseUrl("http://localhost:" + wireMockPort).build();
-
-        WebClientResponseException exception =
-                assertThrows(WebClientResponseException.class, () -> {
-                    webClient.get()
-                            .uri("/user/UserNotFound/repositories")
-                            .retrieve()
-                            .bodyToMono(RepositoryNoBranches.class)
-                            .block();
-                });
     }
 }

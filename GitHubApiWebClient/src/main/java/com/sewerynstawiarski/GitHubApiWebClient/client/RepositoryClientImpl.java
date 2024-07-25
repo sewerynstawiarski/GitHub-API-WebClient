@@ -32,7 +32,7 @@ public class RepositoryClientImpl implements RepositoryClient {
                 .flatMap(this::addBranches);
     }
     private Mono<RepositoryDTO> addBranches(RepositoryNoBranches repositoryNoBranches) {
-        return getBranches(repositoryNoBranches.getOwner().getLogin(), repositoryNoBranches.getName())
+        return getBranches(repositoryNoBranches.owner().login(), repositoryNoBranches.name())
                 .map(branches -> RepositoryDTO.builder()
                         .repository(repositoryNoBranches)
                         .branches(branches)
