@@ -4,4 +4,4 @@ import lombok.Builder;
 
 import java.util.List;
 @Builder
-public record RepositoryDTO(RepositoryNoBranches repository, List<BranchDTO> branches ) {}
+public record RepositoryDTO(RepositoryNoBranchesDTO repository, List<BranchDTO> branches ) {}

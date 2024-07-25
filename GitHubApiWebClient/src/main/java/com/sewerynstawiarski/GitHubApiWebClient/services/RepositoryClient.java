@@ -1,4 +1,4 @@
-package com.sewerynstawiarski.GitHubApiWebClient.client;
+package com.sewerynstawiarski.GitHubApiWebClient.services;
 
 import com.sewerynstawiarski.GitHubApiWebClient.model.BranchDTO;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;

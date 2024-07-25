@@ -1,6 +1,6 @@
 package com.sewerynstawiarski.GitHubApiWebClient.controllers;
 
-import com.sewerynstawiarski.GitHubApiWebClient.client.RepositoryClient;
+import com.sewerynstawiarski.GitHubApiWebClient.services.RepositoryClient;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

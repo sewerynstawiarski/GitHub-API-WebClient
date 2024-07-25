@@ -1,8 +1,8 @@
-package com.sewerynstawiarski.GitHubApiWebClient.client;
+package com.sewerynstawiarski.GitHubApiWebClient.services;
 
 import com.sewerynstawiarski.GitHubApiWebClient.model.BranchDTO;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
-import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryNoBranches;
+import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryNoBranchesDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -28,11 +28,11 @@ public class RepositoryClientImpl implements RepositoryClient {
                                 .queryParam("type", "owner")
                                 .build(user))
                 .retrieve()
-                .bodyToFlux(RepositoryNoBranches.class)
+                .bodyToFlux(RepositoryNoBranchesDTO.class)
                 .filter(repo -> !repo.fork())
                 .flatMap(this::addBranches);
     }
-    private Mono<RepositoryDTO> addBranches(RepositoryNoBranches repositoryNoBranches) {
+    private Mono<RepositoryDTO> addBranches(RepositoryNoBranchesDTO repositoryNoBranches) {
         return getBranches(repositoryNoBranches.owner().login(), repositoryNoBranches.name())
                 .map(branches -> RepositoryDTO.builder()
                         .repository(repositoryNoBranches)
