@@ -22,10 +22,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port =0)
-class RepositoryClientImplIntTest {
+@SpringBootTest
+@AutoConfigureWireMock(port = 0)
+class GitHubClientImplIntTest {
     @Autowired
     private WebClient.Builder webClientBuilder;
     @Value("${wiremock.server.port}")

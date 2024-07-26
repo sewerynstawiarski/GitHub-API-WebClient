@@ -1,6 +1,6 @@
 package com.sewerynstawiarski.GitHubApiWebClient.controllers;
 
-import com.sewerynstawiarski.GitHubApiWebClient.services.RepositoryClient;
+import com.sewerynstawiarski.GitHubApiWebClient.services.GitHubClient;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +14,9 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class RepositoryController {
+public final class GitHubClientController {
 
-    public final RepositoryClient repoClient;
+    public final GitHubClient repoClient;
 
     @GetMapping("/user/{username}/repositories")
     Flux<RepositoryDTO> getUsersRepositories(@RequestHeader(HttpHeaders.ACCEPT) @PathVariable String username) {

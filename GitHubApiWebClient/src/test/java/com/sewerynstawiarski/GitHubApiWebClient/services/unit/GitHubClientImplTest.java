@@ -9,10 +9,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-
-class RepositoryClientImplTest {
+class GitHubClientImplTest {
     @Autowired
     private WebTestClient webTestClient;
     public static final String USER_REPOSITORIES = "http://localhost:8080/user/{USERNAME}/repositories";
@@ -31,6 +30,6 @@ class RepositoryClientImplTest {
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectHeader().valueEquals("Content-type", "application/json")
-                .expectBody().jsonPath("$.message").isEqualTo("User of this name was not found on GitHub");
+                .expectBody().jsonPath("$.message").isEqualTo("A user with this name was not found on GitHub");
     }
 }

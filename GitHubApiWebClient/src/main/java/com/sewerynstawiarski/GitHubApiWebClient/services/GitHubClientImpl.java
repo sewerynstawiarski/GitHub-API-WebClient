@@ -1,8 +1,11 @@
 package com.sewerynstawiarski.GitHubApiWebClient.services;
 
-import com.sewerynstawiarski.GitHubApiWebClient.model.BranchDTO;
+import com.sewerynstawiarski.GitHubApiWebClient.domain.Branch;
+import com.sewerynstawiarski.GitHubApiWebClient.domain.Repository;
+import com.sewerynstawiarski.GitHubApiWebClient.domain.RepositoryNoBranches;
+import com.sewerynstawiarski.GitHubApiWebClient.mapper.RepositoryMapper;
+import com.sewerynstawiarski.GitHubApiWebClient.mapper.RepositoryMapperImpl;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
-import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryNoBranchesDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -11,14 +14,16 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-public class RepositoryClientImpl implements RepositoryClient {
+public final class GitHubClientImpl implements GitHubClient {
 
     public static final String USER_REPOS = "users/{user}/repos";
     public static final String USER_REPO_BRANCHES = "repos/{user}/{repoName}/branches";
     private final WebClient webClient;
+    private final RepositoryMapper repositoryMapper;
 
-    public RepositoryClientImpl(WebClient.Builder webClient) {
+    public GitHubClientImpl(WebClient.Builder webClient, RepositoryMapper repositoryMapper) {
         this.webClient = webClient.build();
+        this.repositoryMapper = new RepositoryMapperImpl();
     }
 
     @Override
@@ -28,26 +33,27 @@ public class RepositoryClientImpl implements RepositoryClient {
                                 .queryParam("type", "owner")
                                 .build(user))
                 .retrieve()
-                .bodyToFlux(RepositoryNoBranchesDTO.class)
+                .bodyToFlux(RepositoryNoBranches.class)
                 .filter(repo -> !repo.fork())
-                .flatMap(this::addBranches);
+                .flatMap(this::addBranches)
+                .map(repositoryMapper::repositoryToRepositoryDTO);
     }
-    private Mono<RepositoryDTO> addBranches(RepositoryNoBranchesDTO repositoryNoBranches) {
+    private Mono<Repository> addBranches(RepositoryNoBranches repositoryNoBranches) {
         return getBranches(repositoryNoBranches.owner().login(), repositoryNoBranches.name())
-                .map(branches -> RepositoryDTO.builder()
+                .map(branches -> Repository.builder()
                         .repository(repositoryNoBranches)
                         .branches(branches)
                         .build());
     }
 
     @Override
-    public Mono<List<BranchDTO>> getBranches(String user, String repoName) {
+    public Mono<List<Branch>> getBranches(String user, String repoName) {
 
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(USER_REPO_BRANCHES).build(user, repoName))
                 .retrieve()
-                .bodyToFlux(BranchDTO.class)
+                .bodyToFlux(Branch.class)
                 .collectList();
     }
 

@@ -11,6 +11,7 @@ username.
     1.RepositoryNoBranches  - contains:
     1.1 name  
     1.2 OwnerDTO (contains login of the owner)
+    1.3 fork (boolean)
     2.List of BranchDTO, each one contains:
     2.1 name
     2.2 CommitDTO (contains sha of the last made commmit)
@@ -34,11 +35,21 @@ https://developer.github.com/v3
 http://localhost:8080/user/{USERNAME}/repositories
 
 <ins>**Testing**</ins>  
-1._testGetRepositories()_  
-test checks if WebClient correctly connects to API and retrieve list of Repositories and Branches for the user. Response is printed in the terminal.    
-2._testGetBranches()_  
-test checks if WebClient correctly connects and retrieve list of branches with sha of the last commit, from GitHub API. Response is printed in the terminal.  
+**1. services.unit.GitHubClientImplTest**
 
+1.1_ testListRepositories()_  
+
+This test uses webTestClient to simulate a connection from a user. It checks if the application answers with the correct status and body.
+
+1.2._ testListRepositoriesNotFound()_
+
+This test uses webTestClient to simulate a connection from a user with the wrong name of the GitHub account. It checks if the application response matches the guidelines.
+
+**2. services.integration.GitHubClientImplIntTest**
+
+2.1 _testListRepositoriesWithWireMock()_
+
+This test uses wireMock to mock an external server. It checks if the application correctly deals with the answer from an external API by checking if a new object was properly created.
 
 </div>
 
