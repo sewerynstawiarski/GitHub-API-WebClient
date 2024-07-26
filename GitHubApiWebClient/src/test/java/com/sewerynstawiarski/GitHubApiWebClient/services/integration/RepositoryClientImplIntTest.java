@@ -1,6 +1,9 @@
 package com.sewerynstawiarski.GitHubApiWebClient.services.integration;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.sewerynstawiarski.GitHubApiWebClient.model.BranchDTO;
+import com.sewerynstawiarski.GitHubApiWebClient.model.CommitDTO;
+import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryDTO;
 import com.sewerynstawiarski.GitHubApiWebClient.model.RepositoryNoBranchesDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,13 +50,29 @@ class RepositoryClientImplIntTest {
                 .uri("/user/octocat/repositories")
                 .retrieve()
                 .bodyToMono(RepositoryNoBranchesDTO.class)
+                .map(this::addBranches)
                 .block();
 
         System.out.println(response);
 
         assertNotNull(response);
-        assertEquals("octocat.github.io", response.name());
-        assertEquals("octocat", response.owner().login());
+        assertEquals("octocat.github.io", response.repository().name());
+        assertEquals("octocat", response.repository().owner().login());
+        assertEquals("Test", response.branches().get(0).name());
+        assertEquals("123456", response.branches().get(0).commit().sha());
 
+    }
+    public RepositoryDTO addBranches(RepositoryNoBranchesDTO repositoryNoBranchesDTO) {
+        BranchDTO branchDTO = BranchDTO.builder()
+                .name("Test")
+                .commit(CommitDTO.builder()
+                        .sha("123456")
+                        .build())
+                .build();
+        List<BranchDTO> branches = new ArrayList<>();
+        branches.add(branchDTO);
+
+
+        return RepositoryDTO.builder().repository(repositoryNoBranchesDTO).branches(branches).build();
     }
 }
