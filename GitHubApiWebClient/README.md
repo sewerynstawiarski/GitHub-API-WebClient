@@ -27,6 +27,8 @@ Java 21
 Lombok  
 Awaitility  
 Webflux    
+MapStruct   
+WireMock
 
 <ins>**Source API (GitHub):**</ins>  
 https://developer.github.com/v3  
@@ -35,21 +37,26 @@ https://developer.github.com/v3
 http://localhost:8080/user/{USERNAME}/repositories
 
 <ins>**Testing**</ins>  
-**1. services.unit.GitHubClientImplTest**
+**1. UNIT TESTS -  services.unit.GitHubClientImplTest**
 
-1.1_ testListRepositories()_  
+**1.1_ '*testListRepositories()*'_**
 
-This test uses webTestClient to simulate a connection from a user. It checks if the application answers with the correct status and body.
+- **Purpose:** Verifying if the application can successfully retrieve a list of repositories from GitHubAPI.
+- **Approach:** Using *webTestClient* to simulate user connections.
+- **Assertion:** It checks if the application responds with the correct HTTP status code and body.
 
-1.2._ testListRepositoriesNotFound()_
+**1.2._ '*testListRepositoriesNotFound()*'_**
 
-This test uses webTestClient to simulate a connection from a user with the wrong name of the GitHub account. It checks if the application response matches the guidelines.
+- **Purpose:** Ensures proper behavior when the user provides the wrong name of the GitHub Account.
+- **Approach:** Simulate a user connection with a non-existing GitHub account name.
+- **Assertion:** Confirms that the application responded according to guidelines (with a 404 code and message).
 
-**2. services.integration.GitHubClientImplIntTest**
+**2. INTEGRATION TESTS -  services.integration.GitHubClientImplIntTest**
 
-2.1 _testListRepositoriesWithWireMock()_
+**2.1 _'*testListRepositoriesWithWireMock()*'_**
 
-This test uses wireMock to mock an external server. It checks if the application correctly deals with the answer from an external API by checking if a new object was properly created.
-
+- **Purpose:** Testing application behavior when interacting with an external server.
+- **Approach:** Uses *wireMock* to simulate responses from the GitHub server.
+- **Assertion:** Verifying that the application process response from the external server is correct by creating and passing a new object.
 </div>
 
