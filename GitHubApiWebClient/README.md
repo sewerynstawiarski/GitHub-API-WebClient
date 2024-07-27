@@ -1,6 +1,6 @@
 <div style="text-align: center;">
 
-<ins>***<h1>-REST API-</h1>***</ins>
+<ins>***<h1>-GITHUBAPI CLIENT-</h1>***</ins>
 
 <font size="3">The goal of the application is to allow to 
 access all repositories of GitHub user, of which he/she is an owner, based on 
@@ -24,8 +24,7 @@ Spring Boot 3.2.2
 Java 21  
 
 <ins>**Dependencies:**</ins>  
-Lombok  
-Awaitility  
+Lombok
 Webflux    
 MapStruct   
 WireMock
@@ -57,6 +56,11 @@ http://localhost:8080/user/{USERNAME}/repositories
 
 - **Purpose:** Testing application behavior when interacting with an external server.
 - **Approach:** Uses *wireMock* to simulate responses from the GitHub server.
-- **Assertion:** Verifying that the application process response from the external server is correct by creating and passing a new object.
+  - **Assertion:** Verifying that the application process response from the external server is correct by creating and passing a new object. 
+  
+**2.1 _'*testListRepositoriesWithWireMock()*'_**
+- **Purpose:** Testing application behavior when the GitHub user cannot be found.
+- **Approach:** Uses *wireMock* to simulate responses from the GitHub server.
+- **Assertion:** Confirms the application passes *WebClientResponseException* properly.
 </div>
 
