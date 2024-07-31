@@ -27,7 +27,8 @@ Java 21
 Lombok
 Webflux    
 MapStruct   
-WireMock
+WireMock    
+Tomcat
 
 <ins>**Source API (GitHub):**</ins>  
 https://developer.github.com/v3  
@@ -37,7 +38,7 @@ http://localhost:8080/user/{USERNAME}/repositories
 
 <ins>**Testing**</ins>  
 
-**Tests requires using a separate profile called *"GitHubApiWebClientApplicationTest"* that uses the *application-test.properties* file to set up a *wireMock server***
+**Tests requires using a separate profile called *"GitHubApiWebClientApplicationTest"* that uses the *"application-test.properties"* file to set up a *wireMock server***
 
 **1. IMPLEMENTATION TESTS -  services.unit.GitHubClientImplTest**
 
