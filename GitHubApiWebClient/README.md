@@ -36,7 +36,10 @@ https://developer.github.com/v3
 http://localhost:8080/user/{USERNAME}/repositories
 
 <ins>**Testing**</ins>  
-**1. UNIT TESTS -  services.unit.GitHubClientImplTest**
+
+**Tests requires using a separate profile called *"GitHubApiWebClientApplicationTest"* that uses the *application-test.properties* file to set up a *wireMock server***
+
+**1. IMPLEMENTATION TESTS -  services.unit.GitHubClientImplTest**
 
 **1.1_ '*testListRepositories()*'_**
 
@@ -52,15 +55,27 @@ http://localhost:8080/user/{USERNAME}/repositories
 
 **2. INTEGRATION TESTS -  services.integration.GitHubClientImplIntTest**
 
-**2.1 _'*testListRepositoriesWithWireMock()*'_**
+**2.1 _'*listRepositoriesWithWireMockTest()*'_**
 
 - **Purpose:** Testing application behavior when interacting with an external server.
 - **Approach:** Uses *wireMock* to simulate responses from the GitHub server.
-  - **Assertion:** Verifying that the application process response from the external server is correct by creating and passing a new object. 
+- **Assertion:** Verifying that the application process response from the external server is correct by creating and passing a new object. 
   
-**2.1 _'*testListRepositoriesWithWireMock()*'_**
+**2.2 _'*listRepositoriesUserNotFoundWithWireMocKTest()*'_**
 - **Purpose:** Testing application behavior when the GitHub user cannot be found.
 - **Approach:** Uses *wireMock* to simulate responses from the GitHub server.
 - **Assertion:** Confirms the application passes *WebClientResponseException* properly.
+  
+**2.3 _'*listRepositoriesWithWireMocKAndWebClientTestTest()*'_**
+
+- **Purpose:** Checking application behavior when receiving call from user.
+- **Approach:** Uses *wireMock* to simulate an external server and *webTestClient* to simulate a connection from the user.
+- **Assertion:** Confirms that after receiving a response from an external server, the application passes a correctly structured JSON response to the user.
+
+**2.4 _'*listRepositoriesUserNotFoundWithWireMocKAndWebTestClientTest()*'_**
+
+- **Purpose:** Checking application behavior when receiving request from user with the wrong username.
+- **Approach:** Uses *wireMock* to simulate an external server response and *webTestClient* to simulate a connection from the user.
+- **Assertion:** Confirms that after receiving a response with an error from an external server, the application passes a correct message and status response to the user.
 </div>
 

@@ -27,9 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureWireMock(port = 0)
 @AutoConfigureWebTestClient
 @ActiveProfiles("test")
-class GitHubClientImplIntTest {
+class GitHubClientIntegrationTest {
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private WebClient webClient;
     @Value("${wiremock.server.port}")
     private int wireMockPort;
     @Autowired
@@ -38,20 +38,16 @@ class GitHubClientImplIntTest {
     @BeforeEach
     void init() {
         WireMock.reset();
-
-        webClientBuilder.baseUrl("http://localhost:" + wireMockPort);
     }
 
     @Test
-    void listRepositoriesWithWireMocKTest() {
+    void listRepositoriesWithWireMockTest() {
         stubFor(WireMock.get(urlEqualTo("/user/octocat/repositories"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
                                 {"name":"octocat.github.io","owner":{"login":"octocat"}}""")));
-
-        WebClient webClient = webClientBuilder.defaultHeader("Accept", "application/vnd.github+json").build();
 
         var response = webClient.get()
                 .uri("/user/octocat/repositories")
@@ -91,8 +87,6 @@ class GitHubClientImplIntTest {
                         .withBody("""
                                 {"message":"Not Found","documentation_url":"https://docs.github.com/rest/repos/repos#list-repositories-for-a-user","status":"404"}""")));
 
-        WebClient webClient = webClientBuilder.defaultHeader("Accept", "application/vnd.github+json").build();
-
         assertThrows(WebClientResponseException.class, () -> {
             webClient.get()
                     .uri("/user/BadUser/repositories")
@@ -112,9 +106,7 @@ class GitHubClientImplIntTest {
                         .withBody("""
                                 {"message":"Not Found","documentation_url":"https://docs.github.com/rest/repos/repos#list-repositories-for-a-user","status":"404"}""")));
 
-        System.out.println("Port opf wireMock = " + wireMockPort);
-
-         webTestClient.get().uri("http://localhost:" + wireMockPort + "/user/BadUser/repositories")
+        webTestClient.get().uri("http://localhost:" + wireMockPort + "/user/BadUser/repositories")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectHeader().valueEquals("Content-type", "application/json")
@@ -128,19 +120,24 @@ class GitHubClientImplIntTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                {"name":"octocat.github.io","owner":{"login":"octocat"}}""")));
+                                [{"name":"octocat.github.io","owner":{"login":"octocat"},"fork":false}]""")));
 
         stubFor(WireMock.get(urlEqualTo("/repos/octocat/octocat.github.io/branches"))
                 .willReturn(aResponse()
                         .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                {"name":"gh-pages","commit":{"sha":"c0e4a095428f36b81f0bd4239d353f71918cbef3"}""")));
+                                [{"name":"gh-pages","commit":{"sha":"c0e4a095428f36b81f0bd4239d353f71918cbef3"}}]""")));
 
         webTestClient.get().uri("http://localhost:" + wireMockPort + "/user/octocat/repositories")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
-                .expectBody().jsonPath("$.size()").isEqualTo(2)
-                .returnResult();
+                .expectBody()
+                .jsonPath("$.size()").isEqualTo(1)
+                .jsonPath("$[0].repository.name").isEqualTo("octocat.github.io")
+                .jsonPath("$[0].repository.owner.login").isEqualTo("octocat")
+                .jsonPath("$[0].branches[0].name").isEqualTo("gh-pages")
+                .jsonPath("$[0].branches[0].commit.sha").isEqualTo("c0e4a095428f36b81f0bd4239d353f71918cbef3");
     }
 }
