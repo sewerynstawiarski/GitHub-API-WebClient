@@ -1,4 +1,4 @@
-package com.sewerynstawiarski.GitHubApiWebClient.services.unit;
+package com.sewerynstawiarski.GitHubApiWebClient.services.implementation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,9 @@ class GitHubClientImplementationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
-                .expectBody().jsonPath("$.size()").isEqualTo(6);
+                .expectBody()
+                .jsonPath("$.size()").isEqualTo(6)
+                .jsonPath("$[0].repository.owner.login").isEqualTo("octocat");
     }
 
     @Test

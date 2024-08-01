@@ -17,7 +17,7 @@ username.
     2.2 CommitDTO (contains sha of the last made commmit)
 
 
-<ins>_Content is provided in json format and requires header "Accept: application/json" with GET request._</ins>  
+<ins>_Content is provided in JSON format and requires header "Accept: application/json" with GET request._</ins>  
 
 <ins>**Used technologies:**</ins>  
 Spring Boot 3.2.2  
@@ -38,7 +38,7 @@ http://localhost:8080/user/{USERNAME}/repositories
 
 <ins>**Testing**</ins>  
 
-**Tests requires using a separate profile called *"GitHubApiWebClientApplicationTest"* that uses the *"application-test.properties"* file to set up a *wireMock server***
+**Tests requires using a separate profile called *"GitHubApiWebClientApplicationTest"* that uses the *"application-test.properties"* file to set up a *wireMock server.***
 
 **1. IMPLEMENTATION TESTS -  services.unit.GitHubClientImplTest**
 
@@ -51,7 +51,7 @@ http://localhost:8080/user/{USERNAME}/repositories
 **1.2._ '*testListRepositoriesNotFound()*'_**
 
 - **Purpose:** Ensures proper behavior when the user provides the wrong name of the GitHub Account.
-- **Approach:** Simulate a user connection with a non-existing GitHub account name.
+- **Approach:** Simulate a user connection with a non-existing GitHub account name by using *webTestClient*.
 - **Assertion:** Confirms that the application responded according to guidelines (with a 404 code and message).
 
 **2. INTEGRATION TESTS -  services.integration.GitHubClientImplIntTest**
