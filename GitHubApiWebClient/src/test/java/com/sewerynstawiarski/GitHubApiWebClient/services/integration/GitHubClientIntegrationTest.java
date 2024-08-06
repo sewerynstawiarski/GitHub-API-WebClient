@@ -107,6 +107,7 @@ class GitHubClientIntegrationTest {
                                 {"message":"Not Found","documentation_url":"https://docs.github.com/rest/repos/repos#list-repositories-for-a-user","status":"404"}""")));
 
         webTestClient.get().uri("http://localhost:" + wireMockPort + "/user/BadUser/repositories")
+                .header("Accept", "application/json")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectHeader().valueEquals("Content-type", "application/json")
@@ -130,6 +131,7 @@ class GitHubClientIntegrationTest {
                                 [{"name":"gh-pages","commit":{"sha":"c0e4a095428f36b81f0bd4239d353f71918cbef3"}}]""")));
 
         webTestClient.get().uri("http://localhost:" + wireMockPort + "/user/octocat/repositories")
+                .header("Accept", "application/json")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
